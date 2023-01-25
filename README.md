@@ -244,14 +244,13 @@ Long story short, they all work as expected, but the benefits seem to come only 
 			:set ($newips->($keyindex)) ""
 		} else={
 			remove $value
+			:set countremoved ($countremoved+1)
 		}
 	}
 	:foreach value in=$newips do={
 		:if ($value != "") do={
-			:do {
-                add list=prod_blocklist address="$value";
-                :set countnew ($countnew+1);
-            } on-error {:put "Error: $value"}"
+                add list=prod_blocklist address="$value"
+                :set countnew ($countnew+1)
 		}
 	}
 }
