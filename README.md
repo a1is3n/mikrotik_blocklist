@@ -222,8 +222,21 @@ Long story short, they all work as expected, but the benefits seem to come only 
 
 **2 - Download (Policy: read, write, test Schedule: every 3h, 5min after download above)**
 ```
-:log info "blocklist-REP started"
-:log info "blocklist-REP started - disabling info"
+:log info "blocklist-REP: started"
+
+:local rbootver [/system routerboard get current-firmware]
+:local version ([:tonum [:pick $rbootver 0 1]]*10 + [:tonum [:pick $rbootver 2 3]])
+:local minversion 62
+
+:log info "blocklist-REP: Detected ROS version $rbootver"
+	
+:if ($version >= $minversion ) do={
+	:log info "blocklist-REP: Running with error handling"
+} else={
+	:log info "blocklist-REP: Running without error handling"
+}
+
+:log info "blocklist-REP: disabling info"
 /system logging disable 0
 
 /import file-name=blocklist_ga_l.rsc
@@ -236,6 +249,7 @@ Long story short, they all work as expected, but the benefits seem to come only 
 :local countnew 0
 :local countremoved 0
 :local counttotal [:len $newips]
+:local counterror 0
 
 :if ($counttotal > 0 ) do={
 	:foreach value in=$prdkeys do={
@@ -247,17 +261,31 @@ Long story short, they all work as expected, but the benefits seem to come only 
 			:set countremoved ($countremoved+1)
 		}
 	}
-	:foreach value in=$newips do={
-		:if ($value != "") do={
-                add list=prod_blocklist address="$value"
-                :set countnew ($countnew+1)
+	:if ($version >= $minversion ) do={
+		:foreach value in=$newips do={
+			:if ($value != "") do={
+				:do { add list=prod_blocklist address="$value" } on-error { :set counterror ($counterror+1) }
+				:set countnew ($countnew+1)
+			}
 		}
+	} else={
+		:foreach value in=$newips do={
+			:if ($value != "") do={
+				add list=prod_blocklist address="$value"
+				:set countnew ($countnew+1)
+			}
+		}	
 	}
 }
 
 :set newips
 
 /system logging enable 0
-:log info "blocklist-REP finished - enabled info"
-:log info "blocklist-REP finished:  $countremoved removed, $countnew new / $counttotal  total"
+:log info "blocklist-REP: finished, enabled info"
+
+:if ($version >= $minversion ) do={
+	:log info "blocklist-REP: $countremoved removed, $countnew new, $counterror errors / $counttotal  total"
+} else={
+	:log info "blocklist-REP: $countremoved removed, $countnew new / $counttotal  total"
+}
 ```
