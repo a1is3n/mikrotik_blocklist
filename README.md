@@ -220,7 +220,92 @@ Long story short, they all work as expected, but the benefits seem to come only 
 :log info "blocklist-DL finished"
 ```
 
-**2 - Download (Policy: read, write, test Schedule: every 3h, 5min after download above)**
+**2 - Update - simplest form (Policy: read, write, test Schedule: every 3h, 5min after download above)**
+```
+:log info "blocklist-REP: started"
+:log info "blocklist-REP: started - disabling info"
+/system logging disable 0
+
+/import file-name=blocklist_ga_l.rsc
+
+/ip firewall address-list
+
+:local prdkeys [find list=prod_blocklist]
+:global newips
+
+:local countnew 0
+:local countremoved 0
+:local counttotal [:len $newips]
+
+:if ($counttotal > 0 ) do={
+	:foreach value in=$prdkeys do={
+		:local keyindex [:find $newips [get $value address]]
+		:if ($keyindex > 0) do={
+			:set ($newips->($keyindex)) ""
+		} else={
+			remove $value
+			:set countremoved ($countremoved+1)
+		}
+	}
+	:foreach value in=$newips do={
+		:if ($value != "") do={
+			add list=prod_blocklist address="$value"
+			:set countnew ($countnew+1)
+		}
+	}
+}
+
+:set newips
+
+/system logging enable 0
+:log info "blocklist-REP: finished - enabled info"
+:log info "blocklist-REP: finished - $countremoved removed, $countnew new / $counttotal  total"
+```
+
+**2b - Update - with error detection, requires ROS >= 6.2 (Policy: read, write, test Schedule: every 3h, 5min after download above)**
+```
+:log info "blocklist-REP: started"
+:log info "blocklist-REP: started - disabling info"
+/system logging disable 0
+
+/import file-name=blocklist_ga_l.rsc
+
+/ip firewall address-list
+
+:local prdkeys [find list=prod_blocklist]
+:global newips
+
+:local countnew 0
+:local countremoved 0
+:local counttotal [:len $newips]
+:local counterror 0
+
+:if ($counttotal > 0 ) do={
+	:foreach value in=$prdkeys do={
+		:local keyindex [:find $newips [get $value address]]
+		:if ($keyindex > 0) do={
+			:set ($newips->($keyindex)) ""
+		} else={
+			remove $value
+			:set countremoved ($countremoved+1)
+		}
+	}
+	:foreach value in=$newips do={
+		:if ($value != "") do={
+			:do { add list=prod_blocklist address="$value" } on-error { :set counterror ($counterror+1) }
+			:set countnew ($countnew+1)
+		}
+	}
+}
+
+:set newips
+
+/system logging enable 0
+:log info "blocklist-REP: finished - enabled info"
+:log info "blocklist-REP: finished - $countremoved removed, $countnew new, $counterror errors / $counttotal  total"
+```
+
+**2c - Update - fancy with ROS version detection (Policy: read, write, test Schedule: every 3h, 5min after download above)**
 ```
 :log info "blocklist-REP: started"
 
@@ -281,11 +366,11 @@ Long story short, they all work as expected, but the benefits seem to come only 
 :set newips
 
 /system logging enable 0
-:log info "blocklist-REP: finished, enabled info"
+:log info "blocklist-REP: finished - enabled info"
 
 :if ($version >= $minversion ) do={
-	:log info "blocklist-REP: $countremoved removed, $countnew new, $counterror errors / $counttotal  total"
+	:log info "blocklist-REP: finished - $countremoved removed, $countnew new, $counterror errors / $counttotal  total"
 } else={
-	:log info "blocklist-REP: $countremoved removed, $countnew new / $counttotal  total"
+	:log info "blocklist-REP: finished - $countremoved removed, $countnew new / $counttotal  total"
 }
 ```
