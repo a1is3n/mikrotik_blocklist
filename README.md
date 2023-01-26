@@ -212,7 +212,7 @@ Long story short, they all work as expected, but the benefits seem to come only 
 
 ### SAMPLE SCRIPTS TO USE IN ROUTEROS
 
-Thanks @njumaen for the ideas!
+Thanks @njumaen for the ideas! I added some exemplary bells and whistles...
 
 **1 - Download (Policy: ftp, read, write, test Schedule: every 3h)**
 
@@ -227,6 +227,8 @@ Thanks @njumaen for the ideas!
 :log info "blocklist-REP: started"
 :log info "blocklist-REP: started - disabling info"
 /system logging disable 0
+
+:local duration [/system clock get time]
 
 /import file-name=blocklist_ga_l.rsc
 
@@ -258,10 +260,11 @@ Thanks @njumaen for the ideas!
 }
 
 :set newips
+:set duration ([/system clock get time] - $duration)
 
 /system logging enable 0
 :log info "blocklist-REP: finished - enabled info"
-:log info "blocklist-REP: finished - $countremoved removed, $countnew new / $counttotal  total"
+:log info "blocklist-REP: finished - $countremoved removed, $countnew new, in $duration / $counttotal  total"
 ```
 
 **2b - Update - with error detection, requires ROS >= 6.2 (Policy: read, write, test Schedule: every 3h, 5min after download above)**
@@ -269,6 +272,8 @@ Thanks @njumaen for the ideas!
 :log info "blocklist-REP: started"
 :log info "blocklist-REP: started - disabling info"
 /system logging disable 0
+
+:local duration [/system clock get time]
 
 /import file-name=blocklist_ga_l.rsc
 
@@ -301,10 +306,11 @@ Thanks @njumaen for the ideas!
 }
 
 :set newips
+:set duration ([/system clock get time] - $duration)
 
 /system logging enable 0
 :log info "blocklist-REP: finished - enabled info"
-:log info "blocklist-REP: finished - $countremoved removed, $countnew new, $counterror errors / $counttotal  total"
+:log info "blocklist-REP: finished - $countremoved removed, $countnew new, $counterror errors, in $duration / $counttotal  total"
 ```
 
 **2c - Update - fancy with ROS version detection (Policy: read, write, test Schedule: every 3h, 5min after download above)**
@@ -325,6 +331,8 @@ Thanks @njumaen for the ideas!
 
 :log info "blocklist-REP: disabling info"
 /system logging disable 0
+
+:local duration [/system clock get time]
 
 /import file-name=blocklist_ga_l.rsc
 
@@ -366,13 +374,14 @@ Thanks @njumaen for the ideas!
 }
 
 :set newips
+:set duration ([/system clock get time] - $duration)
 
 /system logging enable 0
 :log info "blocklist-REP: finished - enabled info"
 
 :if ($version >= $minversion ) do={
-	:log info "blocklist-REP: finished - $countremoved removed, $countnew new, $counterror errors / $counttotal  total"
+	:log info "blocklist-REP: finished - $countremoved removed, $countnew new, $counterror errors, in $duration / $counttotal  total"
 } else={
-	:log info "blocklist-REP: finished - $countremoved removed, $countnew new / $counttotal  total"
+	:log info "blocklist-REP: finished - $countremoved removed, $countnew new, in $duration / $counttotal  total"
 }
 ```
