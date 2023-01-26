@@ -212,6 +212,8 @@ Long story short, they all work as expected, but the benefits seem to come only 
 
 ### SAMPLE SCRIPTS TO USE IN ROUTEROS
 
+Thanks @njumaen for the ideas!
+
 **1 - Download (Policy: ftp, read, write, test Schedule: every 3h)**
 
 ```
