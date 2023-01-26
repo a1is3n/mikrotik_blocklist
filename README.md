@@ -212,7 +212,7 @@ Long story short, they all work as expected, but the benefits seem to come only 
 
 ### SAMPLE SCRIPTS TO USE IN ROUTEROS
 
-Thanks @njumaen for the ideas! I added some exemplary bells and whistles...
+Thanks @njumaen for the ideas and code snippets! Added some exemplary bells and whistles...
 
 **1 - Download (Policy: ftp, read, write, test Schedule: every 3h)**
 
