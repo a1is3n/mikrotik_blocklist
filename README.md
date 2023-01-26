@@ -268,6 +268,7 @@ Thanks @njumaen for the ideas! I added some exemplary bells and whistles...
 ```
 
 **2b - Update - with error detection, requires ROS >= 6.2 (Policy: read, write, test Schedule: every 3h, 5min after download above)**
+
 This introduces about 2-3% performace hit.
 
 ```
