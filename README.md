@@ -4,7 +4,8 @@ This should increase the performance on the router while minimizing ressource us
 
 Currently, this list updates every 3h - while working out what a good frequency would be.
 
-There are now two lists maintained. The "normal" one, excluding cinsarmy and firehol_l2 (ca. 20k entries). And another one with suffix "\_l", including everything (ca. 35k entries).
+There are now two lists maintained. The "normal" one, excluding cinsarmy and (ca. 25k entries). And another one with suffix "\_l", including everything (ca. 30k entries).
+Yet, one more with suffix "\_xl", including everything and ipsum l1 (ca. 170k entries).
 
 The following is ment as a reference for the blocklist sources, regex and basic mechanics - by no means should you cut, paste and run this in a production environement ... unless you add some proper error handling amongst other bells and whistles. 
 
@@ -21,14 +22,11 @@ wget -O blocklist_de.out https://lists.blocklist.de/lists/all.txt
 wget -O cinsarmy.out https://cinsscore.com/list/ci-badguys.txt
 wget -O feodo.out https://feodotracker.abuse.ch/downloads/ipblocklist.txt
 wget -O firehol_l1.out https://iplists.firehol.org/files/firehol_level1.netset
-wget -O firehol_l2.out https://iplists.firehol.org/files/firehol_level2.netset
+wget -O ipsum_l1.out https://raw.githubusercontent.com/stamparm/ipsum/master/levels/1.txt
 
 # dshield entires are in /24 
 wget -O dshield.in https://feeds.dshield.org/block.txt
 grep '^[1-9]' dshield.in | awk '{print $1"/24"}' > dshield.out
-
-# add tor_exits
-wget -O tor_exits.out https://check.torproject.org/torbulkexitlist
 ```
 
 Alternatively, we could do the grab with curl (`-s` for silence):
@@ -42,16 +40,12 @@ curl https://lists.blocklist.de/lists/all.txt-o blocklist_de.out -s
 curl https://cinsscore.com/list/ci-badguys.txt -o cinsarmy.out -s
 curl https://feodotracker.abuse.ch/downloads/ipblocklist.txt -o feodo.out -s
 curl https://iplists.firehol.org/files/firehol_level1.netset -o firehol_l1.out -s
-curl https://iplists.firehol.org/files/firehol_level2.netset -o firehol_l2.out -s
+curl https://raw.githubusercontent.com/stamparm/ipsum/master/levels/1.txt -o ipsum_l1.out -s
 
 # dshield entires are in /24 
 curl https://feeds.dshield.org/block.txt -o dshield.in -s
 grep '^[1-9]' dshield.in | awk '{print $1"/24"}' > dshield.out
-
-# add tor_exits
-curl https://check.torproject.org/torbulkexitlist -o tor_exits.out -s
 ```
-
 
 Now, we merge all list entries, extraxt IP/CIDR information, and add missing /32 where needed (for aggregate-prefix to work).
 
