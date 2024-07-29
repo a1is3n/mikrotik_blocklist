@@ -27,9 +27,6 @@ wget -O ipsum_l1.out https://raw.githubusercontent.com/stamparm/ipsum/master/lev
 # dshield entires are in /24 
 wget -O dshield.in https://feeds.dshield.org/block.txt
 grep '^[1-9]' dshield.in | awk '{print $1"/24"}' > dshield.out
-
-# add tor_exits
-wget -O tor_exits.out https://check.torproject.org/torbulkexitlist
 ```
 
 Alternatively, we could do the grab with curl (`-s` for silence):
@@ -48,11 +45,7 @@ curl https://raw.githubusercontent.com/stamparm/ipsum/master/levels/1.txt -o ips
 # dshield entires are in /24 
 curl https://feeds.dshield.org/block.txt -o dshield.in -s
 grep '^[1-9]' dshield.in | awk '{print $1"/24"}' > dshield.out
-
-# add tor_exits
-curl https://check.torproject.org/torbulkexitlist -o tor_exits.out -s
 ```
-
 
 Now, we merge all list entries, extraxt IP/CIDR information, and add missing /32 where needed (for aggregate-prefix to work).
 
