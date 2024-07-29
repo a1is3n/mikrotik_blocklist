@@ -4,7 +4,8 @@ This should increase the performance on the router while minimizing ressource us
 
 Currently, this list updates every 3h - while working out what a good frequency would be.
 
-There are now two lists maintained. The "normal" one, excluding cinsarmy and firehol_l2 (ca. 20k entries). And another one with suffix "\_l", including everything (ca. 35k entries).
+There are now two lists maintained. The "normal" one, excluding cinsarmy and firehol_l2 (ca. 20k entries). And another one with suffix "\_l", including everything (ca. 30k entries).
+Yet, one more with suffix "\_xl", including everything and ipsum l1 (ca. 170k entries).
 
 The following is ment as a reference for the blocklist sources, regex and basic mechanics - by no means should you cut, paste and run this in a production environement ... unless you add some proper error handling amongst other bells and whistles. 
 
