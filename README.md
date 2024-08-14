@@ -16,7 +16,6 @@ First, we grab the lists and extract IP/CIDR information from them (adding /32 w
 ```
 wget -O tor_exits.out https://raw.githubusercontent.com/SecOps-Institute/Tor-IP-Addresses/master/tor-exit-nodes.lst
 wget -O spamhaus_drop.out https://www.spamhaus.org/drop/drop.txt
-wget -O spamhaus_edrop.out https://www.spamhaus.org/drop/edrop.txt
 wget -O sslbl.out https://sslbl.abuse.ch/blacklist/sslipblacklist.txt
 wget -O blocklist_de.out https://lists.blocklist.de/lists/all.txt
 wget -O cinsarmy.out https://cinsscore.com/list/ci-badguys.txt
@@ -32,15 +31,15 @@ grep '^[1-9]' dshield.in | awk '{print $1"/24"}' > dshield.out
 Alternatively, we could do the grab with curl (`-s` for silence):
 
 ```
-curl https://raw.githubusercontent.com/SecOps-Institute/Tor-IP-Addresses/master/tor-exit-nodes.lst -o tor_exits.out -s
-curl https://www.spamhaus.org/drop/drop.txt -o spamhaus_drop.out -s
-curl https://www.spamhaus.org/drop/edrop.txt -o spamhaus_edrop.out -s
-curl https://sslbl.abuse.ch/blacklist/sslipblacklist.txt -o sslbl.out -s
-curl https://lists.blocklist.de/lists/all.txt-o blocklist_de.out -s
-curl https://cinsscore.com/list/ci-badguys.txt -o cinsarmy.out -s
-curl https://feodotracker.abuse.ch/downloads/ipblocklist.txt -o feodo.out -s
-curl https://iplists.firehol.org/files/firehol_level1.netset -o firehol_l1.out -s
-curl https://raw.githubusercontent.com/stamparm/ipsum/master/levels/1.txt -o ipsum_l1.out -s
+curl https://raw.githubusercontent.com/SecOps-Institute/Tor-IP-Addresses/master/tor-exit-nodes.lst -o tor_exits.out_s
+curl https://www.spamhaus.org/drop/drop.txt -o spamhaus_drop.out_s
+curl https://sslbl.abuse.ch/blacklist/sslipblacklist.txt -o sslbl.out_s
+curl https://lists.blocklist.de/lists/all.txt -o blocklist_de.out_s
+curl https://cinsscore.com/list/ci-badguys.txt -o cinsarmy.out_l
+curl https://feodotracker.abuse.ch/downloads/ipblocklist.txt -o feodo.out_s
+curl https://iplists.firehol.org/files/firehol_level1.netset -o firehol_l1.out_s
+curl https://raw.githubusercontent.com/stamparm/ipsum/master/levels/1.txt -o ipsum_l1.out_xl
+curl https://raw.githubusercontent.com/stamparm/ipsum/master/levels/333xt -o ipsum_l3.out_s
 
 # dshield entires are in /24 
 curl https://feeds.dshield.org/block.txt -o dshield.in -s
