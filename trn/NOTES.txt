@@ -18,10 +18,12 @@ mkdir sikarag\nginx
 mkdir sikarag\nssm
 mkdir sikarag\ollama
 mkdir sikarag\python
-mkdir sikarag\python\DLLs
-mkdir sikarag\python\Scripts
 mkdir sikarag\siteapis
 mkdir sikarag\siteapis\pmo
+
+only if vanilla
+	mkdir sikarag\python\DLLs
+	mkdir sikarag\python\Scripts
 
 add to path C:\Program Files\sikarag\nssm
 add to path C:\Program Files\sikarag\ollama
