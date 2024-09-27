@@ -177,3 +177,16 @@ CUDA_VISIBLE_DEVICES=-1
 OLLAMA_DEBUG=1
 OLLAMA_HOST=0.0.0.0
 OLLAMA_ORIGINS=*
+
+
+USE OPENAI VERSIONS
+use vectorizer_openai.py
+use ollama_service_openai.
+ollama_uri_emb = http://localhost:11434/v1
+
+REVERSE PROXY FOR OLLAMA
+config.ini
+ollama_uri_v1 = http://localhost:43411/v1
+ollama_uri_emb = http://localhost:43411/v1
+
+use nginx_ollamarev.conf
