@@ -147,6 +147,7 @@ TROUBLESHOOT
 
 python transcriber
 	fixed with new transcriber.py
+	make sure ffmpeg is installed and in path (see top)
 
 python vectorizer
 	proxy/security issue connecting to ollama localhost, browser, powershell wget working
