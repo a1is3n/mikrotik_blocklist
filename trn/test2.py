@@ -8,8 +8,7 @@ headers = {
 }
 data = {
     "model": "phi3-3.8b-mini-4k-instruct-fp16",  # Specify the model you want to use
-    "prompt": "Why is the sky blue?",
-    # "max_tokens": 100,  # Adjust the token limit as needed
+    "prompt": "Give me 10 words about debugging.",
     "stream": True  # Enable streaming responses
 }
 
